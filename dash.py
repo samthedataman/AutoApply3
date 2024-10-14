@@ -17,9 +17,9 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-# BrowserStack configuration
-browserstack_username = "sam_EZN3oS"
-browserstack_access_key = "gDAipyU2c2CpNpJDQULS"
+
+browserstack_username = st.secrets["browserstack_username"] = "sam_EZN3oS"
+browserstack_access_key = st.secrets["browserstack_access_key"] = "gDAipyU2c2CpNpJDQULS"
 
 
 def get_driver():
