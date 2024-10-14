@@ -1,0 +1,15 @@
+[server]
+port = 8501
+enableCORS = true
+enableXsrfProtection = true
+headless = true
+
+[browser]
+serverAddress = "localhost"
+serverPort = 8501
+
+[global]
+
+developmentMode = false
+BROWSERSTACK_USERNAME = "sam_EZN3oS"
+BROWSERSTACK_ACCESS_KEY = "gDAipyU2c2CpNpJDQULS"
