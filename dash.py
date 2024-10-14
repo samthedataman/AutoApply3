@@ -18,8 +18,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 
-browserstack_username = st.secrets["browserstack_username"]
-browserstack_access_key = st.secrets["browserstack_access_key"]
+browserstack_username = st.secrets["browserstack"]["username"]
+browserstack_access_key = st.secrets["browserstack"]["access_key"]
 
 
 def get_driver():
