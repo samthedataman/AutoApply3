@@ -304,7 +304,7 @@ def main():
         email = st.query_params.get("email", "")
         access_token = st.query_params.get("access_token", "")
     except:
-        st.log("No query parameters found.")
+        st.write("No query parameters found.")
         email = ""
         access_token = ""
 
