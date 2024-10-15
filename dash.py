@@ -300,8 +300,13 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 # Main function to run the Streamlit app
 def main():
     # Get query parameters
-    email = st.query_params.get("email", "")
-    access_token = st.query_params.get("access_token", "")
+    try:
+        email = st.query_params.get("email", "")
+        access_token = st.query_params.get("access_token", "")
+    except:
+        st.log("No query parameters found.")
+        email = ""
+        access_token = ""
 
     # Display user info if available
     if email and access_token:
