@@ -299,13 +299,28 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 
 # Main function to run the Streamlit app
 def main():
+    # Get query parameters
+    email = st.query_params.get("email", "")
+    access_token = st.query_params.get("access_token", "")
+
+    # Display user info if available
+    if email and access_token:
+        st.markdown(
+            f"""
+            <div class="user-info">
+                👤 Logged in as: {email}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     st.title("🎲 Dice Job Scraper and Applicator")
 
     st.markdown(
         """
     <div class="info-box">
         <h3>Welcome to the Dice Job Scraper!</h3>
-        <p>This tool helps you automate your job search and application process on Dice.com. Simply enter your credentials, job preferences, and let the scraper do the work for you.</p>
+        <p>This tool helps you automate your job search and application process on Dice.com. Simply enter your job preferences, and let the scraper do the work for you.</p>
     </div>
     """,
         unsafe_allow_html=True,
@@ -314,7 +329,8 @@ def main():
     col1, col2 = st.columns(2)
 
     with col1:
-        email = st.text_input("✉️ Enter your Dice.com email:", key="email")
+        if not email:
+            email = st.text_input("✉️ Enter your Dice.com email:", key="email")
         password = st.text_input(
             "🔑 Enter your Dice.com password:", type="password", key="password"
         )
