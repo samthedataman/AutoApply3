@@ -304,7 +304,7 @@ def main():
         email = st.query_params.get("email", "")
         access_token = st.query_params.get("access_token", "")
     except:
-        st.write("No query parameters found.")
+        st.write("please log in to start auto-applying!")
         email = ""
         access_token = ""
 
