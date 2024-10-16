@@ -16,6 +16,14 @@ from selenium.common.exceptions import (
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import streamlit as st
+from urllib.parse import parse_qs, urlparse
+
+
+def get_query_params():
+    """Parse query parameters from the URL."""
+    query_string = urlparse(st.experimental_get_query_params()).query
+    return parse_qs(query_string)
 
 
 browserstack_username = st.secrets["browserstack"]["username"]
@@ -299,25 +307,38 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 
 # Main function to run the Streamlit app
 def main():
-    # Get query parameters
+    # Try to extract parameters with better error handling
     try:
-        email = st.query_params.get("email", "")
-        access_token = st.query_params.get("access_token", "")
-    except:
-        st.write("please log in to start auto-applying!")
-        email = ""
-        access_token = ""
+        # Try to extract parameters from the query string
+        query_params = st.query_params()
 
-    # Display user info if available
-    if email and access_token:
+        # Extract individual parameters with default fallbacks
+        email = query_params.get("email", [""])[0]
+        user_id = query_params.get("user_id", [""])[0]
+        access_token = query_params.get("access_token", [""])[0]
+        credits = int(query_params.get("credits", ["0"])[0])
+        username = query_params.get("username", [""])[0]
+        job_title = query_params.get("job_title", [""])[0]
+        avatar_url = query_params.get("avatar_url", [""])[0]
+
+        # Display the extracted parameters if available
+        st.title("🎲 Dice Job Scraper and Applicator")
+
         st.markdown(
             f"""
-            <div class="user-info">
-                👤 Logged in as: {email}
+            <div style="text-align: center;">
+                <h3>👤 {username} ({job_title})</h3>
+                <p>Email: {email}</p>
+                <p>Credits: {credits}</p>
+                <img src="{avatar_url}" alt="Avatar" style="width:100px; border-radius:50%;"/>
             </div>
             """,
             unsafe_allow_html=True,
         )
+    except Exception as e:
+        # Handle any errors gracefully
+        st.error("Failed to load user data. Please try again.")
+        st.write(f"Error: {str(e)}")
 
     st.title("🎲 Dice Job Scraper and Applicator")
 
