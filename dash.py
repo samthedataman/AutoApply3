@@ -301,8 +301,7 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 def main():
     # Get query parameters
     try:
-        email = st.query_params.get("email", "")
-        access_token = st.query_params.get("access_token", "")
+        print(st.query_params())
     except:
         st.write("woops")
         email = ""
