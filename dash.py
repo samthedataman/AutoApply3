@@ -307,38 +307,40 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 
 # Main function to run the Streamlit app
 def main():
-    # Try to extract parameters with better error handling
+    # Get query parameters
     try:
-        # Try to extract parameters from the query string
-        query_params = st.query_params()
+        # Extract query parameters with safe handling
+        email = st.query_params.get("email", "")
+        user_id = st.query_params.get("user_id", "")
+        access_token = st.query_params.get("access_token", "")
+        credits = int(st.query_params.get("credits", "0"))
+        username = st.query_params.get("username", "")
+        job_title = st.query_params.get("job_title", "")
+        avatar_url = st.query_params.get("avatar_url", "")
 
-        # Extract individual parameters with default fallbacks
-        email = query_params.get("email", [""])[0]
-        user_id = query_params.get("user_id", [""])[0]
-        access_token = query_params.get("access_token", [""])[0]
-        credits = int(query_params.get("credits", ["0"])[0])
-        username = query_params.get("username", [""])[0]
-        job_title = query_params.get("job_title", [""])[0]
-        avatar_url = query_params.get("avatar_url", [""])[0]
+    except Exception as e:
+        st.error(
+            "Error parsing query parameters. Please log in to start auto-applying."
+        )
+        st.write(f"Details: {e}")
+        return
 
-        # Display the extracted parameters if available
-        st.title("🎲 Dice Job Scraper and Applicator")
-
+    # Display user info if all necessary parameters are available
+    if email and access_token:
         st.markdown(
             f"""
             <div style="text-align: center;">
                 <h3>👤 {username} ({job_title})</h3>
                 <p>Email: {email}</p>
+                <p>User ID: {user_id}</p>
                 <p>Credits: {credits}</p>
                 <img src="{avatar_url}" alt="Avatar" style="width:100px; border-radius:50%;"/>
             </div>
             """,
             unsafe_allow_html=True,
         )
-    except Exception as e:
-        # Handle any errors gracefully
-        st.error("Failed to load user data. Please try again.")
-        st.write(f"Error: {str(e)}")
+    else:
+        st.warning("Missing parameters. Please log in to start auto-applying.")
 
     st.title("🎲 Dice Job Scraper and Applicator")
 
