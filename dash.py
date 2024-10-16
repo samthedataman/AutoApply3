@@ -16,14 +16,6 @@ from selenium.common.exceptions import (
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import streamlit as st
-from urllib.parse import parse_qs, urlparse
-
-
-def get_query_params():
-    """Parse query parameters from the URL."""
-    query_string = urlparse(st.experimental_get_query_params()).query
-    return parse_qs(query_string)
 
 
 browserstack_username = st.secrets["browserstack"]["username"]
@@ -309,38 +301,23 @@ def apply_to_job(driver, link, email, password, max_attempts=3):
 def main():
     # Get query parameters
     try:
-        # Extract query parameters with safe handling
         email = st.query_params.get("email", "")
-        user_id = st.query_params.get("user_id", "")
         access_token = st.query_params.get("access_token", "")
-        credits = int(st.query_params.get("credits", "0"))
-        username = st.query_params.get("username", "")
-        job_title = st.query_params.get("job_title", "")
-        avatar_url = st.query_params.get("avatar_url", "")
+    except:
+        st.write("woops")
+        email = ""
+        access_token = ""
 
-    except Exception as e:
-        st.error(
-            "Error parsing query parameters. Please log in to start auto-applying."
-        )
-        st.write(f"Details: {e}")
-        return
-
-    # Display user info if all necessary parameters are available
+    # Display user info if available
     if email and access_token:
         st.markdown(
             f"""
-            <div style="text-align: center;">
-                <h3>👤 {username} ({job_title})</h3>
-                <p>Email: {email}</p>
-                <p>User ID: {user_id}</p>
-                <p>Credits: {credits}</p>
-                <img src="{avatar_url}" alt="Avatar" style="width:100px; border-radius:50%;"/>
+            <div class="user-info">
+                👤 Logged in as: {email}
             </div>
             """,
             unsafe_allow_html=True,
         )
-    else:
-        st.warning("Missing parameters. Please log in to start auto-applying.")
 
     st.title("🎲 Dice Job Scraper and Applicator")
 
